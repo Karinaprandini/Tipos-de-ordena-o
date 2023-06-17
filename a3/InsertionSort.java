@@ -23,7 +23,7 @@ public class InsertionSort {
             arr[j + 1] = key;
 
             // Exibe o estado do array após cada iteração
-            System.out.println("Passo " + i + ": " + Arrays.toString(arr));
+            System.out.println("Passo " + i + ": " + Arrays.toString(arr));;
         }
     }
 }

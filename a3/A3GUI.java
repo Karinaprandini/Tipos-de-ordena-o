@@ -1,4 +1,4 @@
-package a3;
+ package a3;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,71 +11,94 @@ public class A3GUI extends JFrame {
 
     public A3GUI() {
         // Define as configurações da GUI
-        setTitle("Algoritmos de Ordenação"); // Título
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Parar o programa ao fechar
-        setSize(400, 300); // Tamanho da janela
-        setLocationRelativeTo(null); // Centraliza a janela
-        setLayout(new BorderLayout());// Define o layout
-        getContentPane().setBackground(Color.WHITE); // Cor do fundo
+        setTitle("Algoritmos de Ordenação");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 300);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(new Color(240, 240, 240));
 
-        //--------------- Exibe o texto de saída ----------
-        outputTextArea = new JTextArea();
-        outputTextArea.setEditable(false);
-        outputTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
-        outputTextArea.setBackground(Color.WHITE);
-        //--------------------------------------------------
-        
-        // Permite fazer o scroll no texto de saída
-        JScrollPane scrollPane = new JScrollPane(outputTextArea);
-        
-        // Cria o btão do selection sort e define a cor do botão
-        JButton selectionSortButton = createButton("SelectionSort", Color.decode("#4CAF50"));
+        // Cria o painel superior com os botões
+        JPanel buttonPanel = createButtonPanel();
+
+        // Cria o painel inferior para a saída de texto
+        JPanel textPanel = createTextPanel();
+
+        // Adiciona os painéis à janela principal
+        add(buttonPanel, BorderLayout.NORTH);
+        add(textPanel, BorderLayout.CENTER);
+    }
+
+    private JPanel createButtonPanel() {
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        buttonPanel.setBackground(new Color(240, 240, 240));
+
+        JButton selectionSortButton = createButton("SelectionSort", new Color(46, 134, 193), Color.WHITE);
+        JButton insertionSortButton = createButton("InsertionSort", new Color(92, 184, 92), Color.WHITE);
+        JButton shellSortButton = createButton("ShellSort", new Color(240, 173, 78), Color.WHITE);
+        JButton resetButton = createButton("Limpar", new Color(217, 83, 79), Color.WHITE);
+
         selectionSortButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int[] array = getUserInput(); // Cria a caixa para o usuário digitar os valores no array
-                if (array.length > 0){ // Chamar a função apenas se o array for maior que zero
-                SelectionSort.selectionSort(array);
-                appendOutput("Array utilizando SelectionSort: " + Arrays.toString(array));
+                int[] array = getUserInput();
+                if (array.length > 0) {
+                    SelectionSort.selectionSort(array);
+                    appendOutput("Array utilizando SelectionSort: " + Arrays.toString(array));
                 }
             }
         });
 
-        // Cria o botão do selection sort e define a cor do botão
-        JButton insertionSortButton = createButton("InsertionSort", Color.decode("#2196F3"));
         insertionSortButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int[] array = getUserInput(); // Cria a caixa para o usuário digitar os valores no array
-                if (array.length > 0){ // Chamar a função apenas se o array for maior que zero
-                InsertionSort.insertionSort(array);
-                appendOutput("Array utilizando InsertionSort: " + Arrays.toString(array));
+                int[] array = getUserInput();
+                if (array.length > 0) {
+                    InsertionSort.insertionSort(array);
+                    appendOutput("Array utilizando InsertionSort: " + Arrays.toString(array));
                 }
             }
         });
 
-        // Cria o btão do selection sort e define a cor do botão
-        JButton shellSortButton = createButton("ShellSort", Color.decode("#FF5722"));
         shellSortButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int[] array = getUserInput(); // Cria a caixa para o usuário digitar os valores no array
-                if (array.length > 0){ // Chamar a função apenas se o array for maior que zero
-                ShellSort.shellSort(array);
-                appendOutput("Array utilizando ShellSort: " + Arrays.toString(array));
+                int[] array = getUserInput();
+                if (array.length > 0) {
+                    ShellSort.shellSort(array);
+                    appendOutput("Array utilizando ShellSort: " + Arrays.toString(array));
                 }
             }
         });
 
-        // Adiciona os botões e a posição deles
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(Color.WHITE);
+        resetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                outputTextArea.setText("");
+            }
+        });
+
         buttonPanel.add(selectionSortButton);
         buttonPanel.add(insertionSortButton);
         buttonPanel.add(shellSortButton);
+        buttonPanel.add(resetButton);
 
-        add(buttonPanel, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
+        return buttonPanel;
+    }
+
+    private JPanel createTextPanel() {
+        JPanel textPanel = new JPanel(new BorderLayout());
+        textPanel.setBackground(Color.WHITE);
+
+        outputTextArea = new JTextArea();
+        outputTextArea.setEditable(false);
+        outputTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        JScrollPane scrollPane = new JScrollPane(outputTextArea);
+
+        textPanel.add(scrollPane, BorderLayout.CENTER);
+
+        return textPanel;
     }
 
     public int[] getUserInput() {
@@ -99,20 +122,18 @@ public class A3GUI extends JFrame {
                 return getUserInput();
             }
         } else {
-            return new int[0]; // Retorna um array vazio se o usuário clicar em "Cancelar"
+            return new int[0];
         }
     }
-    
 
-    // Exibe o texto na tela
     public void appendOutput(String text) {
         outputTextArea.append(text + "\n");
     }
 
-    public JButton createButton(String text, Color backgroundColor) {
+    public JButton createButton(String text, Color backgroundColor, Color textColor) {
         JButton button = new JButton(text);
         button.setBackground(backgroundColor);
-        button.setForeground(Color.WHITE);
+        button.setForeground(textColor);
         button.setFont(new Font("Arial", Font.BOLD, 14));
         button.setFocusPainted(false);
         button.setPreferredSize(new Dimension(120, 30));
